@@ -16,7 +16,9 @@ namespace AirCondInfoUploader
     {
         readonly TcpListener tcpListener;
         CancellationTokenSource stopToken;
-        bool isListening;
+        
+        public bool IsRunning => stopToken != null;
+        
         public TcpLinker(int port)
         {
             tcpListener = new TcpListener(IPAddress.Loopback, port);
@@ -24,29 +26,29 @@ namespace AirCondInfoUploader
         /// <summary>
         /// Start listening
         /// </summary>
-        public void Start()
+        public async Task StartAsync(CancellationTokenSource tokenSource = null)
         {
-            if (isListening) return;
+            if (stopToken != null) return;
             stopToken = new CancellationTokenSource();
-            isListening = true;
-            TcpRequestMonitor(stopToken.Token);
+            await TcpRequestMonitor(stopToken.Token);
         }
         public void Stop()
         {
             stopToken.Cancel();
+            tcpListeners.Stop();
         }
         /// <summary>
         /// Waiting for Tcp link request
         /// </summary>
         /// <param name="token"></param>
-        private async void TcpRequestMonitor(CancellationToken token)
+        private async Task TcpRequestMonitor(CancellationToken token)
         {
             try
             {
                 tcpListener.Start();
                 while (!token.IsCancellationRequested)
                 {
-                    if (!await WaitPending(tcpListener, token)) return;
+                    if (!await WaitPending(token)) return;
                     var tcpClient = await tcpListener.AcceptTcpClientAsync();
 
                     TcpLinkMonitor(tcpClient, token);
@@ -54,7 +56,8 @@ namespace AirCondInfoUploader
             }
             finally
             {
-                isListening = false;
+                stopToken?.Dispose();
+                stopToken = null;
             }
         }
         
@@ -63,7 +66,7 @@ namespace AirCondInfoUploader
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private async Task<bool> WaitPending(TcpListener tcpListener, CancellationToken token)
+        private async Task<bool> WaitPending(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
