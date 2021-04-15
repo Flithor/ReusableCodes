@@ -83,25 +83,33 @@ namespace AirCondInfoUploader
         /// <param name="token"></param>
         private async void TcpLinkMonitor(TcpClient tcpClient, CancellationToken token)
         {
-            const int bufferLength = 1024;
             var remote = tcpClient.Client.RemoteEndPoint.ToString();
-            using (var tcpStream = tcpClient.GetStream())
+            try
             {
-                Console.WriteLine($"Tcp link connected, remote is: {remote}");
-                while (!token.IsCancellationRequested)
+                const int bufferLength = 1024;
+                var remote = tcpClient.Client.RemoteEndPoint.ToString();
+                using (var tcpStream = tcpClient.GetStream())
                 {
-                    byte[] buffer = new byte[bufferLength];
-                    // Read or ReadAsync will pending when the connection alived until disconnect or received avaliable data
-                    var length = await tcpStream.ReadAsync(buffer, 0, bufferLength, token);
-                    // If disconnect, Read or ReadAsync returns 0
-                    if (length == 0 || token.IsCancellationRequested) break;
-                    // Trim the array to the actual data length
-                    Array.Resize(ref buffer, length);
-                    // Process received data
-                    ProcessTcpData(buffer);
+                    Console.WriteLine($"Tcp link connected, remote is: {remote}");
+                    while (!token.IsCancellationRequested)
+                    {
+                        byte[] buffer = new byte[bufferLength];
+                        // Read or ReadAsync will pending when the connection alived until disconnect or received avaliable data
+                        var length = await tcpStream.ReadAsync(buffer, 0, bufferLength, token);
+                        // If disconnect, Read or ReadAsync returns 0
+                        if (length == 0 || token.IsCancellationRequested) break;
+                        // Trim the array to the actual data length
+                        Array.Resize(ref buffer, length);
+                        // Process received data
+                        ProcessTcpData(buffer);
+                    }
                 }
+                Console.WriteLine($"Tcp link disconnected, remote is:{remote}");
             }
-            Console.WriteLine($"Tcp link disconnected, remote is:{remote}");
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + $"\r\nDisconnected by exception, remote is:{remote}");
+            }
         }
         /// <summary>
         /// Process received data
