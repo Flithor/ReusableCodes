@@ -11,9 +11,9 @@ A TextBox Control redirect console output, contains a method to show a simple wi
 
 ## NetWork
 #### [TcpLinker.cs](https://github.com/Flithor/ReusableCodes/blob/main/Network/TcpLinker.cs)
-Use TcpListener accept a TCP connection request and receive data.
+Use TcpListener accept TCP connection requests and receive data.
 #### [TcpLinker_MultiPort.cs](https://github.com/Flithor/ReusableCodes/blob/main/Network/TcpLinker_MultiPort.cs)
-Use TcpListener accept a TCP connection request and receive data, support multiple port.
+Use TcpListener accept TCP connection requests and receive data, open multiple port.
 
 ## WPF
 #### [Slider.Style.NumericUpDown.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/Slider.Style.NumericUpDown.xaml)
