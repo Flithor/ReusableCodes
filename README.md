@@ -1,7 +1,7 @@
 # ReusableCodes
 Reuseable codes in my coding life
 
-### AppSetting
+## AppSetting
 #### [AppSetting.cs](https://github.com/Flithor/ReusableCodes/blob/main/AppSetting/AppSettings.cs)
 Read and instant save configuration
 
