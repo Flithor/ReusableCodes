@@ -7,7 +7,7 @@ Read and instant save configuration
 
 ## Debug
 #### [ConsoleTextBox.cs](https://github.com/Flithor/ReusableCodes/blob/main/Debug/ConsoleTextBox.cs)
-A TextBox Control redirect console output, contains a method to show a simple window with it.
+A TextBox Control(WPF) redirect console output, contains a method to show a simple window with it.
 
 ## NetWork
 #### [TcpLinker.cs](https://github.com/Flithor/ReusableCodes/blob/main/Network/TcpLinker.cs)
