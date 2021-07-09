@@ -98,7 +98,6 @@ namespace MyReusableCodes
             //获取实体类注册属性信息(为影子属性服务,没有设置影子属性时为空不使用)
             var modelProperties = shadowPropertySetters.Length > 0 ? db.Model.FindEntityType(entityType).GetProperties() : null;
             //构建数据库命令参数序列并获取取值信息
-            //var setValueInfos = TranslateExpressionToDbParameters(cmd, modelProperties, setValueExpression, shadowPropertySetters, batchSize);
             var setValueInfo = BuildEntitySetValueInfo(cmd, batchSize, modelProperties, setValueExpression, shadowPropertySetters);
             //单批次计数
             var counting = 0;
@@ -218,64 +217,6 @@ namespace MyReusableCodes
         /// <param name="shadowPropertySetters">设置影子属性的表达式集合</param>
         /// <param name="batchSize">每批次数量</param>
         /// <returns></returns>
-        private static SetValueInfo<TData>[] TranslateExpressionToDbParameters<TEntity, TData>(
-            DbCommand cmd,
-            IEnumerable<IProperty> modelProperties,
-            Expression<Func<TData, TEntity>> setValueExpression,
-            (string entityPropName, Expression<Func<TData, Type, object>> valueSelector)[] shadowPropertySetters,
-            int batchSize) where TEntity : class
-        {
-            //将模型参数转换为字典,仅对影子属性有效,可能为空
-            var propClrTypeDic = modelProperties?.ToDictionary(p => p.Name, p => p.ClrType);
-            //获取表达式树中的对象成员初始化器中的赋值表达式
-            //[Prop = obj.Prop],
-            var settingMembers = (setValueExpression.Body as MemberInitExpression).Bindings.Cast<MemberAssignment>();
-            //将成员初始化器的赋值表达式换为取值信息
-            var setValueInfos = settingMembers
-                .Select(member =>
-                {
-                    //赋值表达式中被赋值的属性信息
-                    //[Prop] = obj.Prop,
-                    var prop = member.Member as PropertyInfo;
-                    //赋值表达式中取值的访问属性表达式
-                    //Prop = [obj.Prop],
-                    var mExpression = member.Expression as MemberExpression;
-
-                    return new SetValueInfo<TData>
-                    {
-                        SourceTypePropName = member.Member.Name,
-                        SourceTypePropType = prop.PropertyType,
-                        SourceTypePropDbType = ToDbType(prop.PropertyType),
-                        //构建委托表达式并编译成委托以进行调用
-                        //[(obj,type) => obj.Prop]
-                        GetDataValueDelegate = Expression.Lambda(mExpression/*[obj.Prop]*/,
-                            mExpression.Expression as ParameterExpression/*[obj]*/ ?? Expression.Parameter(typeof(object))/*dummy*/,
-                            Expression.Parameter(typeof(Type), "type")/*[type]*/).Compile(),
-                    };
-                }).Concat(shadowPropertySetters.Select(t =>
-                {
-                    var propType = propClrTypeDic.GetValueOrDefault(t.entityPropName);
-                    return new SetValueInfo<TData>
-                    {
-                        SourceTypePropName = t.entityPropName,
-                        SourceTypePropType = propType,
-                        SourceTypePropDbType = ToDbType(propType),
-                        //更复杂的取值表达式,可以获取到目标影子属性的数据类型并方便值转换
-                        GetDataValueDelegate = t.valueSelector.Compile()
-                    };
-                })).ToArray();
-            int pIndex = 0;
-            for (int batch = 0; batch < batchSize; batch++)
-            {
-                foreach (var member in setValueInfos)
-                {
-                    //循环添加参数
-                    SetParameter(cmd, member.SourceTypePropDbType, pIndex++);
-                }
-            }
-            return setValueInfos;
-        }
-
         private static EntitySetValueInfo<TData> BuildEntitySetValueInfo<TEntity, TData>(DbCommand cmd,
             int batchSize,
             IEnumerable<IProperty> modelProperties,
