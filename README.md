@@ -1,5 +1,9 @@
 # ReusableCodes
 Reuseable codes in my coding life
+If you need it, you just need add a comment like :
+```
+//Code From: https://github.com/Flithor/ReusableCodes/{file path}
+```
 
 ## AppSetting
 #### [AppSetting.cs](https://github.com/Flithor/ReusableCodes/blob/main/AppSetting/AppSettings.cs)
