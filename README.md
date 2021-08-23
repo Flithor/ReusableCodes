@@ -1,6 +1,6 @@
 # ReusableCodes
 Reuseable codes in my coding life.  
-If you need it, you just need add a comment like :
+If you need it, you just need add comment before the code:
 ```
 //Code From: https://github.com/Flithor/ReusableCodes/{file path}
 ```
@@ -22,3 +22,8 @@ Use TcpListener accept TCP connection requests and receive data, open multiple p
 ## WPF
 #### [Slider.Style.NumericUpDown.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/Slider.Style.NumericUpDown.xaml)
 A MAGIC to turn WPF native control Slider to NumericUpDown
+
+## EFCore
+#### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
+An efficient batch insert expansion method with EF functional style  
+**Attention**: It is not perfect, for example: it does not consider \[Column] and other ways to specify the mapping column name
