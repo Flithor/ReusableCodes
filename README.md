@@ -25,5 +25,5 @@ A MAGIC to turn WPF native control Slider to NumericUpDown
 
 ## EFCore
 #### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
-An efficient batch insert expansion method with EF functional style  
+An efficient batch insert expansion method with EF functional style **for MySQL**
 **Attention**: It is not perfect, for example: it does not consider \[Column] and other ways to specify the mapping column name
