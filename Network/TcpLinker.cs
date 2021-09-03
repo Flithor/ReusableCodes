@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AirCondInfoUploader
+namespace MyReusableCodes
 {
     /// <summary>
     /// Use TcpListener to wait Tcplink
