@@ -2,7 +2,7 @@ using System;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 
-namespace MyNameSpace
+namespace Flithor_ReusableCodes
 {
     /// <summary>
     /// Saved instantly configruation class
