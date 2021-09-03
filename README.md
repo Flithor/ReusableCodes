@@ -28,6 +28,6 @@ A MAGIC to turn WPF native control Slider to NumericUpDown
 An efficient batch insert expansion method with EF functional style **for MySQL**  
 **Attention**: It is not perfect, for example: it does not consider \[Column] and other ways to specify the mapping column name
 
-##Program
+## Program
 #### [SingleInstance.cs](https://github.com/Flithor/ReusableCodes/blob/main/Program/SingleInstance.cs)
 An easy to use helpper class to help you check your program has any other running instance exists.
