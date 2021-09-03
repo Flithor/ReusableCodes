@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyReusableCodes
+namespace Flithor_ReusableCodes
 {
     /// <summary>
     /// Use TcpListener to wait Tcplink
