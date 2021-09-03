@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace MyReusableCodes
+namespace Flithor_ReusableCodes
 {
     public static class EFExtensions
     {
