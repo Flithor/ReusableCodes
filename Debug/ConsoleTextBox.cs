@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace MyNameSpace
+namespace MyReusableCodes
 {
     /// <summary>
     /// Show Console output in textbox for WPF
