@@ -4,9 +4,9 @@ using System.Threading;
 namespace Flithor_ReusableCodes
 {
     /// <summary>
-    /// Singleton helpper class. Call <see cref="InstanceExists"/> check any running instance exists
+    /// Singleton helper class. Call <see cref="InstanceExists"/> check any running instance exists
     /// </summary>
-    public static class SingleInstance
+    public static class SingletonHelper
     {
         private static readonly string SINGLETON_ID = GetAssebmlyName();
         private static Mutex singletonMutex = new Mutex(true, SINGLETON_ID);
