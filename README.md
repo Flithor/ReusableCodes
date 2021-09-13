@@ -36,6 +36,7 @@ Example:
   
 var queryOr = myQuery.AsWhereOr();
 // for a condition list ...
+// queryOr = queryOr.WhereOr(a => /*some condition*/)
 
 myQuery = queryOr.AsQueryable();
 ```
