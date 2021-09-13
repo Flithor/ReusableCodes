@@ -86,7 +86,8 @@ namespace Flithors_ReusableCodes
         }
 
         /// <summary>
-        /// Convert <see cref="IQueryable{T}"/> to <see cref="IQueryOr{T}"/> to make next condition append as or predicate
+        /// Convert <see cref="IQueryable{T}"/> to <see cref="IQueryOr{T}"/> to make next condition append as or predicate.
+        /// Call <see cref="IQueryOr{T}.AsQueryable"/> back to <see cref="IQueryable{T}"/> linq.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
@@ -94,18 +95,6 @@ namespace Flithors_ReusableCodes
         public static IQueryOr<TSource> AsWhereOr<TSource>(this IQueryable<TSource> source)
         {
             return new OrPredicateBuilder<TSource>(source);
-        }
-        /// <summary>
-        /// In a way that conforms to Linq's functional syntax to convert <see cref="IQueryable{T}"/> to <see cref="IQueryOr{T}"/>
-        /// and make next condition append as or predicate.
-        /// Call <see cref="IQueryOr{T}.AsQueryable"/> back to <see cref="IQueryable{T}"/> linq
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IQueryOr<TSource> WhereOr<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate)
-        {
-            return new OrPredicateBuilder<TSource>(source).WhereOr(predicate);
         }
     }
 }
