@@ -41,6 +41,7 @@ var queryOr = myQuery.AsWhereOr();
 myQuery = queryOr.AsQueryable();
 ```
 **Attention**: `Where` will be an independent condition, it will "and" with `WhereOr`.
+**Attention 2**: It is not implemented in accordance with IQueryable paradigm, but its usage is almost the same as linq, and it works well.
 
 ## Program common
 #### [SingletonHelper.cs](https://github.com/Flithor/ReusableCodes/blob/main/Program/SingletonHelper.cs)
