@@ -7,7 +7,7 @@ If you need it, you just need add comment before the code:
 
 ## AppSetting
 #### [AppSetting.cs](https://github.com/Flithor/ReusableCodes/blob/main/AppSetting/AppSettings.cs)
-Read and instant save configuration
+Read and instant save configuration.
 
 ## Debug
 #### [ConsoleTextBox.cs](https://github.com/Flithor/ReusableCodes/blob/main/Debug/ConsoleTextBox.cs)
@@ -21,13 +21,26 @@ Use TcpListener accept TCP connection requests and receive data, open multiple p
 
 ## WPF
 #### [Slider.Style.NumericUpDown.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/Slider.Style.NumericUpDown.xaml)
-A MAGIC to turn WPF native control Slider to NumericUpDown
+A MAGIC to turn WPF native control `Slider` to `NumericUpDown`.
 
-## EFCore
+## EF Core
 #### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
 An efficient batch insert expansion method with EF functional style **for MySQL**  
-**Attention**: It is not perfect, for example: it does not consider \[Column] and other ways to specify the mapping column name
+**Attention**: It is not perfect, for example: it does not consider \[Column] and other ways to specify the mapping column name.
 
-## Program
+#### [OrPredicate.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/OrPredicate.cs)
+A linq way extension make IQueryable<T> support or predicate.  
+Example:
+```
+// IQueryable<ClassA> myQuery = ....;
+  
+var queryOr = myQuery.AsWhereOr();
+// for a condition list ...
+
+myQuery = queryOr.AsQueryable();
+```
+**Attention**: `Where` will be an independent condition, it will "and" with `WhereOr`.
+
+## Program common
 #### [SingletonHelper.cs](https://github.com/Flithor/ReusableCodes/blob/main/Program/SingletonHelper.cs)
 An easy to use helper class to help you check your program has any other running instance exists.
