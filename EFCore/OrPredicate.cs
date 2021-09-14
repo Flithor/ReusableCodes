@@ -31,6 +31,11 @@ namespace Flithors_ReusableCodes
 
             #region private methods
             internal OrPredicateBuilder(IQueryable<T> sourceQueryable) => this.sourceQueryable = sourceQueryable;
+            private OrPredicate(IQueryable<T> sourceQueryable, IEnumerable<Expression<Func<T, bool>>> predicates)
+            {
+                this.sourceQueryable = sourceQueryable;
+                this.predicates.AddRange(predicates);
+            }
 
             //===============================================
             // Code From: https://stackoverflow.com/a/50414456/6859121
@@ -78,10 +83,15 @@ namespace Flithors_ReusableCodes
             #region public methods
             public IQueryOr<T> WhereOr(Expression<Func<T, bool>> predicate)
             {
-                predicates.Add(predicate);
-                return this;
+                return new OrPredicate<T>(sourceQueryable, predicates.Append(predicate));
             }
-            public IQueryable<T> AsQueryable() => sourceQueryable.Where(GetExpression());
+            public IQueryable<T> AsQueryable()
+            {
+                if (predicates.Count > 0)
+                    return sourceQueryable.Where(GetExpression());
+                else // If not any predicates exists, returns orignal query
+                    return sourceQueryable;
+            }
             #endregion
         }
 
