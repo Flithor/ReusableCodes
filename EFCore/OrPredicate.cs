@@ -83,8 +83,7 @@ namespace Flithors_ReusableCodes
             #region public methods
             public IQueryOr<T> WhereOr(Expression<Func<T, bool>> predicate)
             {
-                predicates.Add(predicate);
-                return new OrPredicate<T>(sourceQueryable, predicates);
+                return new OrPredicate<T>(sourceQueryable, predicates.Append(predicate));
             }
             public IQueryable<T> AsQueryable()
             {
