@@ -94,10 +94,10 @@ namespace Flithor_ReusableCodes
         /// <param name="token"></param>
         private async void TcpLinkMonitor(TcpClient tcpClient, CancellationToken token)
         {
+            var remote = tcpClient.Client.RemoteEndPoint.ToString();
             try
             {
                 const int bufferLength = 1024;
-                var remote = tcpClient.Client.RemoteEndPoint.ToString();
                 using (var tcpStream = tcpClient.GetStream())
                 {
                     Console.WriteLine($"Tcp link connected, remote is: {remote}");
