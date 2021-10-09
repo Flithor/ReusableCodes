@@ -94,7 +94,6 @@ namespace Flithor_ReusableCodes
         /// <param name="token"></param>
         private async void TcpLinkMonitor(TcpClient tcpClient, CancellationToken token)
         {
-            var remote = tcpClient.Client.RemoteEndPoint.ToString();
             try
             {
                 const int bufferLength = 1024;
