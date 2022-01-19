@@ -26,7 +26,7 @@ namespace Flithor_ReusableCodes
         }
         private static string GetAssebmlyName()
         {
-            var assembly = typeof(SingleInstance).Assembly;
+            var assembly = typeof(SingletonHelper).Assembly;
             return assembly.GetName().Name;
         }
     }
