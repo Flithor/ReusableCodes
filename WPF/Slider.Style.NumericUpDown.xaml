@@ -24,7 +24,7 @@
                     <TextBox Grid.RowSpan="2" Height="Auto"
                                 Margin="0" Padding="0"
                                 VerticalAlignment="Stretch" VerticalContentAlignment="Center"
-                                Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value}">
+                                Text="{Binding Value, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}">
                         <TextBox.InputBindings>
                             <KeyBinding Gesture="Up" Command="{x:Static Slider.IncreaseSmall}" />
                             <KeyBinding Gesture="Down" Command="{x:Static Slider.DecreaseSmall}" />
