@@ -22,6 +22,7 @@ Use TcpListener accept TCP connection requests and receive data, open multiple p
 ## WPF
 #### [Slider.Style.NumericUpDown.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/Slider.Style.NumericUpDown.xaml)
 A MAGIC to turn WPF native control `Slider` to `NumericUpDown`.
+Learn More here: https://stackoverflow.com/a/63734191/6859121
 
 ## EF Core
 #### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
