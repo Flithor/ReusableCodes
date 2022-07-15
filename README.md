@@ -25,9 +25,9 @@ A MAGIC to turn WPF native control `Slider` to `NumericUpDown`.
 Learn More here: https://stackoverflow.com/a/63734191/6859121
 
 #### DropDownControl
-[DropDownControl.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DropDownControl.xaml)  
-[DropDownControl.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DropDownControl.cs)  
-A control with ComboBox like but can contains any custom content.
+Default style: [DropDownControl.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DropDownControl.xaml)  
+Control codes: [DropDownControl.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DropDownControl.cs)  
+A Custom Control with ComboBox like but can contains any custom content.
 
 ## EF Core
 #### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
