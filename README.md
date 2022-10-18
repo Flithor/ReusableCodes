@@ -5,6 +5,8 @@ If you need it, you just need add comment before the code:
 //Code From: https://github.com/Flithor/ReusableCodes/{file path}
 ```
 
+**Disclaimer: I am not responsible for any consequences of anyone trusting and using my code.**
+
 ## AppSetting
 #### [AppSetting.cs](https://github.com/Flithor/ReusableCodes/blob/main/AppSetting/AppSettings.cs)
 Read and instant save configuration.
