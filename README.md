@@ -52,7 +52,8 @@ myQuery = queryOr.AsQueryable();
 **Attention 2**: It is not implemented in accordance with IQueryable paradigm, but its usage is almost the same as linq, and it works well.
 
 #### [EFRemoveExtension.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/EFRemoveExtension.cs)
-Some extension methods to make you remove data by condition or get primary keys to use them in some other place
+Some extension methods to make you remove data by condition or get primary keys to use them in some other place.  
+It's optimized to only query the primary key unless you need the entity.  
 Example:
 ```
 // Delete by match item
