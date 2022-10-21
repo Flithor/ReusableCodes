@@ -51,6 +51,33 @@ myQuery = queryOr.AsQueryable();
 **Attention**: `Where` will be an independent condition, it will "and" with `WhereOr`.  
 **Attention 2**: It is not implemented in accordance with IQueryable paradigm, but its usage is almost the same as linq, and it works well.
 
+#### [EFRemoveExtension.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/EFRemoveExtension.cs)
+Some extension methods to make you remove data by condition or get primary keys to use them in some other place
+Example:
+```
+// Delete by match item
+dbContext.RemoveWhere<YourEntity>(e => e.name == deleteName && e.type == deleteType));
+dbContext.SaveChanges();
+
+// Delete by id list
+dbContext.RemoveWhere<YourEntity>(e => ids.Contains(e.id));
+dbContext.SaveChanges();
+
+//Fit for DbSet<T>
+dbContext.Set<YourEntity>().RemoveWhere(e => e.name = deleteName));
+dbContext.SaveChanges();
+
+//Get deleted entities
+var deletedItems = dbContext.RemoveWhereAndTake<YourEntity>(e => ids.Contains(e.id));
+dbContext.SaveChanges();
+return deletedItems;
+
+//Get primary keys of deleted items, and use them
+var deletedKeys = dbContext.RemoveWhereAndTakeKeys<YourEntity>(e => ids.Contains(e.id));
+dbContext.RemoveWhere<RelatedEntity>(re => deletedKeys.Contains(re.parent_key));
+dbContext.SaveChanges();
+```
+
 ## Program common
 #### [SingletonHelper.cs](https://github.com/Flithor/ReusableCodes/blob/main/Program/SingletonHelper.cs)
 An easy to use helper class to help you check your program has any other running instance exists.
