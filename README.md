@@ -73,7 +73,7 @@ dbContext.SaveChanges();
 return deletedItems;
 
 //Get primary keys of deleted items, and use them
-var deletedKeys = dbContext.RemoveWhereAndTakeKeys<YourEntity>(e => ids.Contains(e.id));
+var deletedKeys = dbContext.RemoveWhereAndTakeKeys<YourEntity>(e => e.name.Contains(deleteKeyWord)).Selected(e => e.id).ToList();
 dbContext.RemoveWhere<RelatedEntity>(re => deletedKeys.Contains(re.parent_key));
 dbContext.SaveChanges();
 ```
