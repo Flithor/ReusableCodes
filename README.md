@@ -27,7 +27,7 @@ A MAGIC to turn WPF native control `Slider` to `NumericUpDown`.
 Learn More here: https://stackoverflow.com/a/63734191/6859121
 
 #### [AssemblyVersion.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/AssemblyVersion.cs)
-A `MarkupExtension` work in xaml for output the file version of current or target type assembly.
+A `MarkupExtension` work in xaml for output the file version of current or target type assembly.  
 Example: `<Window Title="{mk:AssemblyVersion Formatter='My Software V{0}'}">`
 
 #### DropDownControl
