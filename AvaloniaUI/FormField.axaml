@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrl="clr-namespace:Flithor_ReusableCodes.Controls">
     <Design.PreviewWith>
-        <Grid RowDefinitions="Auto,Auto">
+        <Grid RowDefinitions="Auto,Auto,Auto">
             <!--  Grid LayOut  -->
             <Border Padding="10" BorderBrush="Red"
                     BorderThickness="2">
@@ -16,7 +16,7 @@
                         <TextBox Width="100" />
                     </ctrl:FormField>
 
-                    <ctrl:FormField Header="Field Three---" Row="1"
+                    <ctrl:FormField Header="Field ThreeABCDDEF" Row="1"
                                     RowSpan="2">
                         <TextBox Width="100" />
                     </ctrl:FormField>
@@ -24,7 +24,6 @@
             </Border>
             <!--  Grid LayOut  -->
             <!--  StackPanel Layout  -->
-            <!--  Something wrong here  -->
             <Border Grid.Row="1" Padding="10"
                     BorderBrush="Red"
                     BorderThickness="2">
@@ -35,12 +34,33 @@
                     <ctrl:FormField Header="Field Two">
                         <TextBox />
                     </ctrl:FormField>
-                    <ctrl:FormField Header="Field Three---">
+                    <ctrl:FormField Header="Field ThreeABCDDEF">
                         <TextBox />
                     </ctrl:FormField>
                 </StackPanel>
             </Border>
             <!--  StackPanel Layout  -->
+            <!--  ItemsControl Layout  -->
+            <Border Grid.Row="2" Padding="10"
+                    BorderBrush="Red"
+                    BorderThickness="2">
+                <ItemsControl Grid.IsSharedSizeScope="True">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ctrl:FormField Header="{Binding}">
+                                <TextBox Text="{Binding}" />
+                            </ctrl:FormField>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Items>
+                        <x:Int32>1</x:Int32>
+                        <x:Int32>23</x:Int32>
+                        <x:Int32>456</x:Int32>
+                        <x:Int32>7890</x:Int32>
+                    </ItemsControl.Items>
+                </ItemsControl>
+            </Border>
+            <!--  ItemsControl Layout  -->
         </Grid>
     </Design.PreviewWith>
 
