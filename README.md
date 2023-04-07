@@ -5,7 +5,9 @@ If you need it, you just need add comment before the code:
 //Code From: https://github.com/Flithor/ReusableCodes/{file path}
 ```
 
-**Disclaimer: I am not responsible for any consequences of anyone trusting and using my code.**
+**Disclaimer:  
+I am not responsible for any consequences of anyone trusting and using my code.  
+Treat any code you got by CTRL+C/V with caution.**
 
 ## AppSetting
 #### [AppSetting.cs](https://github.com/Flithor/ReusableCodes/blob/main/AppSetting/AppSettings.cs)
