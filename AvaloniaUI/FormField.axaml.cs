@@ -32,31 +32,11 @@ namespace Flithor_ReusableCodes.Controls
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
-            // 4
             contentGrid = e.NameScope.Get<Grid>("Grid_Content");
             // clear and reset
             contentGrid?.ColumnDefinitions.Clear();
             contentGrid?.RowDefinitions.Clear();
-            // try an other way
-            //if (contentGrid?.ColumnDefinitions.Count == 3)
-            //{
-            //    PART_FieldWidth = contentGrid.ColumnDefinitions[0];
-            //    HorizontalGap = contentGrid.ColumnDefinitions[1];
-            //    HorizontalContainer = contentGrid.ColumnDefinitions[2];
-            //}
-            //if (contentGrid?.RowDefinitions.Count == 3)
-            //{
-            //    PART_FieldHigth = contentGrid.RowDefinitions[0];
-            //    VerticalGap = contentGrid.RowDefinitions[1];
-            //    VerticalContainer = contentGrid.RowDefinitions[2];
-            //}
             UpdateSharedSizeGroup();
-        }
-
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-        {
-            // 1
-            base.OnAttachedToLogicalTree(e);
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -66,22 +46,6 @@ namespace Flithor_ReusableCodes.Controls
             var shareSizeParent = InnerShareSizeParent;
             if (shareSizeParent == null) return;
             Grid.SetIsSharedSizeScope(shareSizeParent as Control, true);
-
-            //if (PART_FieldWidth != null || PART_FieldHigth != null)
-            //    UpdateSharedSizeGroup();
-        }
-
-        protected override Size MeasureCore(Size availableSize)
-        {
-            // 3
-            return base.MeasureCore(availableSize);
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            // 5
-            //UpdateSharedSizeGroup();
-            return base.MeasureOverride(availableSize);
         }
 
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
@@ -90,16 +54,8 @@ namespace Flithor_ReusableCodes.Controls
             if (!IsInitialized) return;
             if (change.Property == Grid.ColumnProperty)
             {
-                //OnGridColumnPropertyChanged(e.OldValue, e.NewValue);
                 UpdateSharedSizeGroup();
             }
-        }
-
-        protected override void OnMeasureInvalidated()
-        {
-           
-            base.OnMeasureInvalidated();
-            //UpdateSharedSizeGroup();
         }
 
         /// <summary>
@@ -127,8 +83,6 @@ namespace Flithor_ReusableCodes.Controls
 
                 contentGrid.RowDefinitions.Clear();
                 contentGrid.ColumnDefinitions.AddRange(new[] { PART_FieldWidth, HorizontalGap, HorizontalContainer });
-                //Dispatcher.UIThread.InvokeAsync(()=>contentGrid.InvalidateMeasure(), DispatcherPriority.Background);
-
             }
             else if (ContainerPosition == FieldContainerPosition.Bottom && PART_FieldHigth != null)
             {
@@ -144,12 +98,8 @@ namespace Flithor_ReusableCodes.Controls
                 VerticalGapBinding =
                     VerticalGap.Bind(RowDefinition.HeightProperty, this.GetBindingObservable(GapProperty));
 
-                //contentGrid.RowDefinitions.RemoveAt(0);
-                //contentGrid.RowDefinitions.Insert(0, PART_FieldHigth);
                 contentGrid.ColumnDefinitions.Clear();
                 contentGrid.RowDefinitions.AddRange(new[] { PART_FieldHigth, VerticalGap, VerticalContainer });
-                //contentGrid.RowDefinitions = new RowDefinitions()
-                //    { PART_FieldHigth, VerticalGap, VerticalContainer };
             }
         }
 
@@ -212,12 +162,6 @@ namespace Flithor_ReusableCodes.Controls
             set { SetValue(Grid.ColumnProperty, value); }
         }
 
-        //private static void OnColumnValueChanged(IAvaloniaObject _this, bool newValue)
-        //{
-        //    if ((_this as FormField)?.Parent is Grid)
-        //        _this.SetValue(Grid.ColumnProperty, newValue);
-        //}
-
         public static readonly StyledProperty<int> ColumnSpanProperty =
             AvaloniaProperty.Register<FormField, int>(nameof(ColumnSpan));
 
@@ -229,12 +173,6 @@ namespace Flithor_ReusableCodes.Controls
             get => GetValue(Grid.ColumnSpanProperty);
             set => SetValue(Grid.ColumnSpanProperty, value);
         }
-
-        //private static void OnColumnSpanValueChanged(IAvaloniaObject _this, bool newValue)
-        //{
-        //    if ((_this as FormField)?.Parent is Grid)
-        //        _this.SetValue(Grid.ColumnSpanProperty, newValue);
-        //}
         #endregion
 
         #endregion
@@ -259,8 +197,7 @@ namespace Flithor_ReusableCodes.Controls
         }
 
         public static readonly AttachedProperty<GridLength> GapProperty =
-            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, GridLength>(nameof(Gap), new GridLength(2), true
-                /*FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.Inherits)*/);
+            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, GridLength>(nameof(Gap), new GridLength(2), true);
 
         #endregion
 
@@ -283,8 +220,7 @@ namespace Flithor_ReusableCodes.Controls
 
         public static readonly AttachedProperty<HorizontalAlignment> HorizontalHeaderAlignmentProperty =
             AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, HorizontalAlignment>(
-                nameof(HorizontalHeaderAlignment), HorizontalAlignment.Left, true
-                /*FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.Inherits)*/);
+                nameof(HorizontalHeaderAlignment), HorizontalAlignment.Left, true);
 
         public VerticalAlignment VerticalHeaderAlignment
         {
@@ -321,8 +257,7 @@ namespace Flithor_ReusableCodes.Controls
         }
 
         public static readonly AttachedProperty<bool> NotAlignWidthProperty =
-            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, bool>(nameof(NotAlignWidth)
-/*                    FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.Inherits,*/);
+            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, bool>(nameof(NotAlignWidth));
 
 
         public FieldContainerPosition ContainerPosition
@@ -341,8 +276,7 @@ namespace Flithor_ReusableCodes.Controls
         }
 
         public static readonly AttachedProperty<FieldContainerPosition> ContainerPositionProperty =
-            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, FieldContainerPosition>(nameof(ContainerPosition)
-                    /*FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.Inherits)*/);
+            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, FieldContainerPosition>(nameof(ContainerPosition));
         #endregion
 
         #region set shared size parent
@@ -383,14 +317,7 @@ namespace Flithor_ReusableCodes.Controls
 
         private AvaloniaObject GetPanelParent(IControl control)
         {
-            IVisual parent = control;
-            do
-            {
-                if (parent is Panel panelParent) return panelParent;
-                parent = parent.VisualParent;
-            } while (parent != null);
-
-            return null;
+            return this.GetLogicalAncestors().FirstOrDefault(x => x is Panel or ItemsControl) as AvaloniaObject;
         }
 
         #endregion
