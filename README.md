@@ -35,6 +35,35 @@ Default style: [DropDownControl.xaml](https://github.com/Flithor/ReusableCodes/b
 Control codes: [DropDownControl.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DropDownControl.cs)  
 A Custom Control with ComboBox like but can contains any custom content.
 
+#### FormField
+Default style: [FormField.xaml](https://github.com/Flithor/ReusableCodes/blob/main/WPF/FormField.xaml)  
+Control codes: [FormField.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/FormField.cs)  
+A control that lets you quickly layout your forms grid.  
+Example:
+```
+<Grid ctrl:FormField.Gap="5">
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition />
+    <ColumnDefinition />
+  </Grid.ColumnDefinitions>
+  <Grid.RowDefinitions>
+    <RowDefinition />
+    <RowDefinition />
+  </Grid.RowDefinitions>
+  <ctrl:FormField Header="ID"><TextBox Text="{Binding ID}"/></ctrl:FormField>
+  <ctrl:FormField Header="Name" Column="1"><TextBox Text="{Binding Name}"/></ctrl:FormField>
+  <ctrl:FormField Header="Age" Row="1"><TextBox Text="{Binding Age}"/></ctrl:FormField>
+  <ctrl:FormField Header="Gender" Row="1" Column="1"><ComboBox SelectedItem="{Binding Gender}" ItemsSource="{x:Static loc:Common.Genders}"/></ctrl:FormField>
+</Grid>
+```
+
+## [Avalonia UI](https://github.com/AvaloniaUI/Avalonia)
+#### FormField
+Default style: [FormField.xaml](https://github.com/Flithor/ReusableCodes/blob/main/AvaloniaUI/FormField.axaml)  
+Control codes: [FormField.cs](https://github.com/Flithor/ReusableCodes/blob/main/AvaloniaUI/FormField.axaml.cs)  
+A control that lets you quickly layout your forms grid.  
+Example Same on WPF version.
+
 ## EF Core
 #### [BulkInsert.cs](https://github.com/Flithor/ReusableCodes/blob/main/EFCore/BulkInsert.cs)
 An efficient batch insert expansion method with EF functional style **for MySQL**  
