@@ -1,27 +1,44 @@
 using System;
+using System.Linq;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
-using Avalonia.VisualTree;
 
-namespace Flithor_ReusableCodes.Controls
+using JetBrains.Annotations;
+
+using ReactiveUI;
+
+namespace AvaloniaUILib.Controls
 {
+    [PseudoClasses(":content-right", ":content-bottom")]
     public partial class FormField : HeaderedContentControl, IHeadered, IStyleable
     {
-        private Grid contentGrid;
+        public FormField()
+        {
+            PseudoClasses.Add(":content-right");
+            PseudoClasses.Add(":content-bottom");
 
-        private ColumnDefinition PART_FieldWidth = new ColumnDefinition(GridLength.Auto);
-        private ColumnDefinition HorizontalGap = new ColumnDefinition(0, GridUnitType.Pixel);
+            PseudoClasses.Set(":content-right",
+                this.WhenAny(_this => _this.ContainerPosition, p => p.Value == FieldContainerPosition.Right));
+            PseudoClasses.Set(":content-bottom",
+                this.WhenAny(_this => _this.ContainerPosition, p => p.Value == FieldContainerPosition.Bottom));
+        }
+
+        private Grid? contentGrid;
+
+        private ColumnDefinition PART_FieldWidth;
+        private ColumnDefinition HorizontalGap;
         private IDisposable HorizontalGapBinding;
-        private ColumnDefinition HorizontalContainer = new ColumnDefinition(GridLength.Star);
-        private RowDefinition PART_FieldHigth = new RowDefinition(GridLength.Auto);
-        private RowDefinition VerticalGap = new RowDefinition(0, GridUnitType.Pixel);
+        private ColumnDefinition HorizontalContainer;
+        private RowDefinition PART_FieldHigth;
+        private RowDefinition VerticalGap;
         private IDisposable VerticalGapBinding;
-        private RowDefinition VerticalContainer = new RowDefinition(GridLength.Star);
+        private RowDefinition VerticalContainer;
 
         static FormField()
         {
@@ -33,29 +50,19 @@ namespace Flithor_ReusableCodes.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             contentGrid = e.NameScope.Get<Grid>("Grid_Content");
-            // clear and reset
-            contentGrid?.ColumnDefinitions.Clear();
-            contentGrid?.RowDefinitions.Clear();
-            UpdateSharedSizeGroup();
-        }
-
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            // 2
-            if (e.Parent == null) return;
-            var shareSizeParent = InnerShareSizeParent;
-            if (shareSizeParent == null) return;
-            Grid.SetIsSharedSizeScope(shareSizeParent as Control, true);
-        }
-
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            if (!IsInitialized) return;
-            if (change.Property == Grid.ColumnProperty)
+            if (contentGrid?.ColumnDefinitions.Count == 3)
             {
-                UpdateSharedSizeGroup();
+                PART_FieldWidth = contentGrid.ColumnDefinitions[0];
+                HorizontalGap = contentGrid.ColumnDefinitions[1];
+                HorizontalContainer = contentGrid.ColumnDefinitions[2];
             }
+            if (contentGrid?.RowDefinitions.Count == 3)
+            {
+                PART_FieldHigth = contentGrid.RowDefinitions[0];
+                VerticalGap = contentGrid.RowDefinitions[1];
+                VerticalContainer = contentGrid.RowDefinitions[2];
+            }
+            UpdateSharedSizeGroup();
         }
 
         /// <summary>
@@ -63,8 +70,13 @@ namespace Flithor_ReusableCodes.Controls
         /// </summary>
         private void UpdateSharedSizeGroup()
         {
+            if (contentGrid == null) return;
+
             var shareSizeParent = InnerShareSizeParent;
             if (shareSizeParent == null) return;
+
+            if (!shareSizeParent.GetValue(Grid.IsSharedSizeScopeProperty))
+                shareSizeParent.SetValue(Grid.IsSharedSizeScopeProperty, true);
 
             if (ContainerPosition == FieldContainerPosition.Right && PART_FieldWidth != null)
             {
@@ -73,15 +85,20 @@ namespace Flithor_ReusableCodes.Controls
                 else
                 {
                     var columnNoTemp = GetValue(Grid.ColumnProperty);
-                    var columnNo = Equals(columnNoTemp, AvaloniaProperty.UnsetValue) ? 0 : (int)columnNoTemp;
-                    PART_FieldWidth.SharedSizeGroup = $"{shareSizeParent.GetType().Name}{shareSizeParent.GetHashCode()}_{columnNo}";
+                    var columnNo = Equals(columnNoTemp, AvaloniaProperty.UnsetValue) ? 0 : columnNoTemp;
+
+                    if (GetShareSizeColumns(shareSizeParent) is { } shareSizeColumns)
+                        columnNo = shareSizeColumns.GetShareIndex(columnNo);
+
+                    PART_FieldWidth.SharedSizeGroup = $"{shareSizeParent.GetType().Name}{shareSizeParent.GetHashCode()}_C{columnNo}";
                 }
 
                 VerticalGapBinding?.Dispose();
                 HorizontalGapBinding =
                     HorizontalGap.Bind(ColumnDefinition.WidthProperty, this.GetBindingObservable(GapProperty));
 
-                contentGrid.RowDefinitions.Clear();
+                //Reset columns for refresh layout
+                contentGrid.ColumnDefinitions.Clear();
                 contentGrid.ColumnDefinitions.AddRange(new[] { PART_FieldWidth, HorizontalGap, HorizontalContainer });
             }
             else if (ContainerPosition == FieldContainerPosition.Bottom && PART_FieldHigth != null)
@@ -90,15 +107,20 @@ namespace Flithor_ReusableCodes.Controls
                     PART_FieldHigth.SharedSizeGroup = null;
                 else
                 {
-                    var columnNoTemp = GetValue(Grid.RowProperty);
-                    var columnNo = Equals(columnNoTemp, AvaloniaProperty.UnsetValue) ? 0 : (int)columnNoTemp;
-                    PART_FieldHigth.SharedSizeGroup = $"{shareSizeParent.GetType().Name}{shareSizeParent.GetHashCode()}_{columnNo}";
+                    var rowNoTemp = GetValue(Grid.RowProperty);
+                    var rowNo = Equals(rowNoTemp, AvaloniaProperty.UnsetValue) ? 0 : rowNoTemp;
+
+                    if (GetShareSizeRows(shareSizeParent) is { } shareSizeRows)
+                        rowNo = shareSizeRows.GetShareIndex(rowNo);
+
+                    PART_FieldHigth.SharedSizeGroup = $"{shareSizeParent.GetType().Name}{shareSizeParent.GetHashCode()}_R{rowNo}";
                 }
                 HorizontalGapBinding?.Dispose();
                 VerticalGapBinding =
                     VerticalGap.Bind(RowDefinition.HeightProperty, this.GetBindingObservable(GapProperty));
 
-                contentGrid.ColumnDefinitions.Clear();
+                //Reset columns for refresh layout
+                contentGrid.RowDefinitions.Clear();
                 contentGrid.RowDefinitions.AddRange(new[] { PART_FieldHigth, VerticalGap, VerticalContainer });
             }
         }
@@ -280,9 +302,9 @@ namespace Flithor_ReusableCodes.Controls
         #endregion
 
         #region set shared size parent
-        public AvaloniaObject ShareSizeParent
+        public Control ShareSizeParent
         {
-            get => GetShareSizeParent(this);
+            get => (Control)GetShareSizeParent(this);
             set => SetShareSizeParent(this, value);
         }
 
@@ -306,20 +328,123 @@ namespace Flithor_ReusableCodes.Controls
             }
         }
 
-        public static readonly AttachedProperty<AvaloniaObject> ShareSizeParentProperty =
-            AvaloniaProperty.RegisterAttached<FormField, AvaloniaObject, AvaloniaObject>(nameof(ShareSizeParent));
+        public static readonly AttachedProperty<Control> ShareSizeParentProperty =
+            AvaloniaProperty.RegisterAttached<FormField, Control, Control>(nameof(ShareSizeParent));
 
 
-        private AvaloniaObject InnerShareSizeParent =>
+        private Control? InnerShareSizeParent =>
             ShareSizeParent ??
             Parent?.GetValue(ShareSizeParentProperty) ??
             GetPanelParent(Parent);
 
-        private AvaloniaObject GetPanelParent(IControl control)
+        private Control? GetPanelParent(IControl? control)
         {
-            return this.GetLogicalAncestors().FirstOrDefault(x => x is Panel or ItemsControl) as AvaloniaObject;
+            if (control == null) return null;
+
+            if (control is ItemsControl || control is Panel)
+                return (Control)control;
+            return control.GetLogicalAncestors().FirstOrDefault(x => x is ItemsControl || x is Panel) as Control;
         }
 
+        #endregion
+
+        #region Specifies the rows and columns that shared width
+
+        public class ShareSizeGroup
+        {
+            private static readonly char[] splitGroup = { ';' };
+            private static readonly char[] splitMember = { ',' };
+
+            private ShareSizeGroup(string shareDefine)
+            {
+                if (shareDefine == null) return;
+                shareGroups = shareDefine.Split(splitGroup, StringSplitOptions.RemoveEmptyEntries).Select(str =>
+                        str.Split(splitMember, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray())
+                    .ToArray();
+            }
+            private int[][] shareGroups;
+
+            public int GetShareIndex(int index) => shareGroups.FirstOrDefault(g => g.Contains(index))?.Min() ?? index;
+
+            public static ShareSizeGroup Parse(string s) => new ShareSizeGroup(s);
+
+            public static implicit operator string(ShareSizeGroup group)
+            {
+                return string.Join(";", group.shareGroups.Select(g => string.Join(",", g)));
+            }
+
+            public static implicit operator ShareSizeGroup(string str)
+            {
+                if (string.IsNullOrEmpty(str)) return null;
+                return new ShareSizeGroup(str);
+            }
+        }
+        /// <summary>
+        /// Specifies the columns that shared width
+        /// </summary>
+        public static readonly AttachedProperty<ShareSizeGroup?> ShareSizeColumnsProperty = AvaloniaProperty.RegisterAttached<FormField, IControl, ShareSizeGroup?>(
+            "ShareSizeColumns", default, true);
+        /// <summary>
+        /// Accessor for Attached property <see cref="ShareSizeColumnsProperty"/>.
+        /// </summary>
+        public static void SetShareSizeColumns(AvaloniaObject element, [CanBeNull] ShareSizeGroup value)
+        {
+            element.SetValue(ShareSizeColumnsProperty, value);
+        }
+
+        /// <summary>
+        /// Accessor for Attached property <see cref="ShareSizeColumnsProperty"/>.
+        /// </summary>
+        [CanBeNull]
+        public static ShareSizeGroup GetShareSizeColumns(AvaloniaObject element)
+        {
+            return element.GetValue(ShareSizeColumnsProperty);
+        }
+
+        /// <summary>
+        /// Specifies the rows that shared width
+        /// </summary>
+        public static readonly AttachedProperty<ShareSizeGroup> ShareSizeRowsProperty = AvaloniaProperty.RegisterAttached<FormField, IControl, ShareSizeGroup>(
+            "ShareSizeRows", default, true);
+
+        /// <summary>
+        /// Accessor for Attached property <see cref="ShareSizeRowsProperty"/>.
+        /// </summary>
+        public static void SetShareSizeRows(AvaloniaObject element, ShareSizeGroup value)
+        {
+            element.SetValue(ShareSizeRowsProperty, value);
+        }
+
+        /// <summary>
+        /// Accessor for Attached property <see cref="ShareSizeRowsProperty"/>.
+        /// </summary>
+        public static ShareSizeGroup GetShareSizeRows(AvaloniaObject element)
+        {
+            return element.GetValue(ShareSizeRowsProperty);
+        }
+
+        /// <summary>
+        /// The margin of header(for string header only)
+        /// </summary>
+        public Thickness HeaderMargin
+        {
+            get => GetHeaderMargin(this);
+            set => SetHeaderMargin(this, value);
+        }
+
+        public static readonly AttachedProperty<Thickness> HeaderMarginProperty =
+            AvaloniaProperty.RegisterAttached<IAvaloniaObject, Thickness>("HeaderMargin", typeof(FormField),
+                inherits: true);
+
+        public static Thickness GetHeaderMargin(AvaloniaObject element)
+        {
+            return (Thickness)element.GetValue(HeaderMarginProperty);
+        }
+
+        public static void SetHeaderMargin(AvaloniaObject element, Thickness value)
+        {
+            element.SetValue(HeaderMarginProperty, value);
+        }
         #endregion
 
         #endregion
