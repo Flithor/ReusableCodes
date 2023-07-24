@@ -1,8 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ctrl="clr-namespace:Flithor_ReusableCodes.Controls">
+        xmlns:ctrl="clr-namespace:AvaloniaUILib.Controls">
     <Design.PreviewWith>
-        <Grid RowDefinitions="Auto,Auto,Auto">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto">
             <!--  Grid LayOut  -->
             <Border Padding="10" BorderBrush="Red"
                     BorderThickness="2">
@@ -61,6 +61,27 @@
                 </ItemsControl>
             </Border>
             <!--  ItemsControl Layout  -->
+            <!--  HeaderPanel Layout  -->
+            <Border Grid.Row="3" Padding="10"
+                    BorderBrush="Red"
+                    BorderThickness="2">
+                <ItemsControl Grid.IsSharedSizeScope="True">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ctrl:FormField ContainerPosition="Bottom" Header="{Binding}">
+                                <TextBox Text="{Binding}" />
+                            </ctrl:FormField>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Items>
+                        <x:Int32>1</x:Int32>
+                        <x:Int32>23</x:Int32>
+                        <x:Int32>456</x:Int32>
+                        <x:Int32>7890</x:Int32>
+                    </ItemsControl.Items>
+                </ItemsControl>
+            </Border>
+            <!--  HeaderPanel Layout  -->
         </Grid>
     </Design.PreviewWith>
 
@@ -76,56 +97,43 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid x:Name="Grid_Content"
+                              ClipToBounds="True"
                               ColumnDefinitions="Auto,0,*"
                               RowDefinitions="Auto,0,*">
-                            <!--<Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="{TemplateBinding Gap}" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>-->
-                            <!--  Cannot write named GridDefinition in style  -->
-                            <!--<Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="PART_FieldWidth" Width="Auto" />
-                                <ColumnDefinition x:Name="HorizontalGap" Width="{TemplateBinding Gap}" />
-                                <ColumnDefinition x:Name="HorizontalContainer" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition x:Name="PART_FieldHigth" Height="Auto" />
-                                <RowDefinition x:Name="VerticalGap" Height="0" />
-                                <RowDefinition x:Name="VerticalContainer" />
-                            </Grid.RowDefinitions>-->
                             <ContentPresenter x:Name="PART_Field"
-                                              Grid.RowSpan="3"
+                                              Margin="{TemplateBinding HeaderMargin}"
                                               HorizontalAlignment="{TemplateBinding HorizontalHeaderAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalHeaderAlignment}"
                                               Content="{TemplateBinding Header}" />
                             <ContentPresenter x:Name="PART_FieldEditor"
-                                              Grid.Row="0" Grid.RowSpan="3"
-                                              Grid.Column="2"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               Content="{TemplateBinding Content}" />
                         </Grid>
                     </Border>
-                    <!--  Not support Trigger now  -->
-                    <!--<ControlTemplate.Triggers>
-                            <Trigger Property="ContainerPosition" Value="Bottom">
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                <Setter TargetName="PART_FieldEditor" Property="Grid.Column" Value="0" />
-                                <Setter TargetName="PART_FieldEditor" Property="Grid.ColumnSpan" Value="3" />
-                                <Setter TargetName="PART_FieldEditor" Property="Grid.Row" Value="2" />
-                                <Setter TargetName="PART_FieldEditor" Property="Grid.RowSpan" Value="1" />
-
-                                <Setter TargetName="PART_Field" Property="Grid.RowSpan" Value="1" />
-                                <Setter TargetName="PART_Field" Property="Grid.ColumnSpan" Value="3" />
-
-                                <Setter TargetName="HorizontalGap" Property="Width" Value="0" />
-                                <Setter TargetName="VerticalGap" Property="Height" Value="{Binding Gap, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                                <Setter TargetName="VerticalContainer" Property="Height" Value="*" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style Selector="ctrl|FormField:content-right /template/ ContentPresenter#PART_FieldEditor">
+        <Setter Property="Grid.Row" Value="0" />
+        <Setter Property="Grid.RowSpan" Value="3" />
+        <Setter Property="Grid.Column" Value="2" />
+        <Setter Property="Grid.ColumnSpan" Value="1" />
+    </Style>
+    <Style Selector="ctrl|FormField:content-right /template/ ContentPresenter#PART_Field">
+        <Setter Property="Grid.RowSpan" Value="3" />
+        <Setter Property="Grid.ColumnSpan" Value="1" />
+    </Style>
+    <Style Selector="ctrl|FormField:content-bottom /template/ ContentPresenter#PART_FieldEditor">
+        <Setter Property="Grid.Column" Value="0" />
+        <Setter Property="Grid.ColumnSpan" Value="3" />
+        <Setter Property="Grid.Row" Value="2" />
+        <Setter Property="Grid.RowSpan" Value="1" />
+    </Style>
+    <Style Selector="ctrl|FormField:content-bottom /template/ ContentPresenter#PART_Field">
+        <Setter Property="Grid.RowSpan" Value="1" />
+        <Setter Property="Grid.ColumnSpan" Value="3" />
     </Style>
 </Styles>
