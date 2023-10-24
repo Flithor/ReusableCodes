@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+ 
+  <!-- ANY THING OF YOUR PROJECT -->
+  <!-- ANY THING OF YOUR PROJECT -->
+  <!-- ANY THING OF YOUR PROJECT -->
+  <!-- ANY THING OF YOUR PROJECT -->
+  <!-- ANY THING OF YOUR PROJECT -->
+  
+  <!-- Exclude specific folders and files from DllIntoFolder moves -->
+	<ItemGroup>
+		<MoveExcludeFolders Include="FOLDER1"/>
+		<MoveExcludeFolders Include="FOLDER2"/>
+		<MoveExcludeFiles Include="File1.txt"/>
+		<MoveExcludeFiles Include="FOLDER/File2.txt"/>
+	</ItemGroup>
+  <!-- Warning: It will affect things such as dll reference and file seeking. -->
+  <!-- If you need to use this, please be sure to handle possible path problems in your code. -->
+  <!-- Import DllIntoFolder.targets -->
+	<Import Project="Properties\DllIntoFolder.targets" Condition="'$(PublishProtocol)'!=''"/>
+</Project>
