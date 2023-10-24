@@ -125,7 +125,7 @@ A **BLACK MAGIC** from [dnspy](https://github.com/dnSpy/dnSpy) to publish all re
    - Pay attention to read the comments!
 3. Try it!
 
-PS: you can edit `DllIntoFolder.targets` to change the dll folder name. `bin` by default.
+PS: you can edit `DllFolder`node in `DllIntoFolder.targets` to change the dll folder name. `bin` by default.
 
 **WARNING**:
 It will affect relative path file seek based on working directory.  
