@@ -117,3 +117,16 @@ dbContext.SaveChanges();
 ## Program common
 #### [SingletonHelper.cs](https://github.com/Flithor/ReusableCodes/blob/main/Program/SingletonHelper.cs)
 An easy to use helper class to help you check your program has any other running instance exists.
+
+#### [PublishDllIntoFolder](https://github.com/Flithor/ReusableCodes/blob/main/Program/PublishDllIntoFolder)
+A **BLACK MAGIC** from [dnspy](https://github.com/dnSpy/dnSpy) to publish all referenced dlls into "bin" folder, make a clean and refreshing publish folder.
+1. Copy files in [Properties](https://github.com/Flithor/ReusableCodes/tree/main/Program/PublishDllIntoFolder/Properties) to your project's `Properties` folder.
+2. Edit your project file(`.csproj`) according to [ExampleProject](https://github.com/Flithor/ReusableCodes/blob/main/Program/PublishDllIntoFolder/ExampleProject.csproj).
+   - Pay attention to read the comments!
+3. Try it!
+
+PS: you can edit `DllIntoFolder.targets` to change the dll folder name. `bin` by default.
+
+**WARNING**:
+It will affect relative path file seek based on working directory.  
+If you need to use this, please be sure to handle possible path errors in your code.
