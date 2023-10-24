@@ -1,32 +1,33 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<Name>DllIntoFolder</Name>
-	</PropertyGroup>
+  <PropertyGroup>
+    <Name>DllIntoFolder</Name>
+    <DllFolder>bin</DllFolder>
+  </PropertyGroup>
 
-	<!--This is used to move all reference dll to a separate folder after publish, as same as dnspy-->
-	<Target Condition="'$(PublishProtocol)'!=''" Name="DllIntoFolder" AfterTargets="Publish">
-		<!--Clear old output-->
-		<RemoveDir Directories="$(PublishDir)bin" />
-		<!--"robocopy" uses 1 as a success exit code, will be considered a failure by Exec task by default.-->
-		<!--Set "ContinueOnError" of Exec task to true to continue even if occur error-->
-		<Exec ContinueOnError="True" Command="robocopy &quot;$(PublishDir.TrimEnd('\'))&quot; &quot;$(PublishDir)bin&quot; /MOVE /E /NP /XD &quot;$(ProjectDir)$(PublishDir)bin&quot; @(MoveExcludeFolders-> '&quot;$(ProjectDir)$(PublishDir)%(RelativeDir)%(FileName)&quot;', ' ') /XF &quot;$(ProjectDir)$(PublishDir)$(AssemblyName).exe&quot; @(MoveExcludeFiles-> '&quot;$(ProjectDir)$(PublishDir)%(RelativeDir)%(FileName)%(Extension)&quot;', ' ')">
-			<!--Then use Output return ExitCode into ErrorCode-->
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-		</Exec>
-		<!--If ExitCode > 8 then break, "robocopy" exit code greater than 8 indicates failure-->
-		<Error Condition="$(ErrorCode) &gt; 8" Message="Failed to move file!" />
-		<!--Call "Patch.cscript" in powershell to modify the entry dll path of .NET Core dll Host exe file-->
-		<Exec Command="powershell $source=Get-Content -Path '$(ProjectDir)Properties/Patch.cscript'; Add-Type -TypeDefinition $source[0]; [AppHostPatcher]::Patch('$(PublishDir)$(AssemblyName).exe','bin/$(AssemblyName).dll')" />
-		<!--Explain command:-->
+  <!--This is used to move all reference dll to a separate folder after publish, as same as dnspy-->
+  <Target Condition="'$(PublishProtocol)'!=''" Name="DllIntoFolder" AfterTargets="Publish">
+    <!--Clear old output-->
+    <RemoveDir Directories="$(PublishDir)$(DllFolder)" />
+    <!--"robocopy" uses 1 as a success exit code, will be considered a failure by Exec task by default.-->
+    <!--Set "ContinueOnError" of Exec task to true to continue even if occur error-->
+    <Exec ContinueOnError="True" Command="robocopy &quot;$(PublishDir.TrimEnd('\'))&quot; &quot;$(PublishDir)$(DllFolder)&quot; /MOVE /E /NP /XD &quot;$(ProjectDir)$(PublishDir)$(DllFolder)&quot; @(MoveExcludeFolders-> '&quot;$(ProjectDir)$(PublishDir)%(RelativeDir)%(FileName)&quot;', ' ') /XF &quot;$(ProjectDir)$(PublishDir)$(AssemblyName).exe&quot; @(MoveExcludeFiles-> '&quot;$(ProjectDir)$(PublishDir)%(RelativeDir)%(FileName)%(Extension)&quot;', ' ')">
+      <!--Then use Output return ExitCode into ErrorCode-->
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <!--If ExitCode > 8 then break, "robocopy" exit code greater than 8 indicates failure-->
+    <Error Condition="$(ErrorCode) &gt; 8" Message="Failed to move file!" />
+    <!--Call "Patch.cscript" in powershell to modify the entry dll path of .NET Core dll Host exe file-->
+    <Exec Command="powershell $source=Get-Content -Path '$(ProjectDir)Properties/Patch.cscript'; Add-Type -TypeDefinition $source[0]; [AppHostPatcher]::Patch('$(PublishDir)$(AssemblyName).exe','$(DllFolder)/$(AssemblyName).dll')" />
+    <!--Explain command:-->
 
-		<!--$source=Get-Content -Path '$(ProjectDir)Properties/Patch.cscript';-->
-		<!-- => Read the contents of the Patch.cscript file and store it in the $source variable ($source is a string array)-->
+    <!--$source=Get-Content -Path '$(ProjectDir)Properties/Patch.cscript';-->
+    <!-- => Read the contents of the Patch.cscript file and store it in the $source variable ($source is a string array)-->
 
-		<!--Add-Type -TypeDefinition $source[0];-->
-		<!-- => Compile the string in the $source variable as a class definition-->
+    <!--Add-Type -TypeDefinition $source[0];-->
+    <!-- => Compile the string in the $source variable as a class definition-->
 
-		<!--[AppHostPatcher]::Patch('$(PublishDir)$(AssemblyName).exe','bin/$(AssemblyName).dll')-->
-		<!-- => Call the Patch method in the compiled class AppHostPatcher-->
-		<!--    and modify the entry dll path of the host exe '$(PublishDir)$(AssemblyName).exe" to bin/$(AssemblyName).dll-->
-	</Target>
+    <!--[AppHostPatcher]::Patch('$(PublishDir)$(AssemblyName).exe','$(DllFolder)/$(AssemblyName).dll')-->
+    <!-- => Call the Patch method in the compiled class AppHostPatcher-->
+    <!--    and modify the entry dll path of the host exe '$(PublishDir)$(AssemblyName).exe" to $(DllFolder)/$(AssemblyName).dll-->
+  </Target>
 </Project>
