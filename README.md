@@ -59,6 +59,25 @@ Example:
 </Grid>
 ```
 
+#### [DataGridCheckAllColumn.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DataGridCheckAllColumn.cs)
+A DataGrid Column work for binding to a checkable property for items.
+Allows check all and supports feedback on single item checked changes.
+![image](https://github.com/Flithor/ReusableCodes/assets/23412916/106535d6-1962-40d4-80ff-b0031f3cf8c1)
+
+Easy to use:
+```
+<DataGrid.Columns>
+    <!-- Binding to bool property for entity which means it checked -->
+    <fc:DataGridCheckAllColumn Binding="{Binding IsChecked}" />
+    <!-- else columns -->
+    <DataGridTextColumn Header="Name" Binding="{Binding EntityName}" />
+</DataGrid.Columns>
+```
+> Notice:  
+> 1. If you set `VirtualizingPanel.IsVirtualizing="True"` on `DataGrid`, you should also set `VirtualizingPanel.VirtualizationMode="Standard"`, otherwise it will caused unexpected binding behavior.
+> 2. Don't set any not implement `INotifyCollectionChanged` collection to ItemsSource, and don't use not implement `INotifyPropertyChanged` class as data source, it will caused **memory leak**.
+ (If leak, is not caused by this class, don't ask me.)
+
 ## [Avalonia UI](https://github.com/AvaloniaUI/Avalonia)
 #### FormField
 Default style: [FormField.xaml](https://github.com/Flithor/ReusableCodes/blob/main/AvaloniaUI/FormField.axaml)  
