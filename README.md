@@ -60,7 +60,7 @@ Example:
 ```
 
 #### [DataGridCheckAllColumn.cs](https://github.com/Flithor/ReusableCodes/blob/main/WPF/DataGridCheckAllColumn.cs)
-A DataGrid Column work for binding to a checkable property for items.
+A DataGrid Column work for binding to a checkable property for items.  
 Allows check all and supports feedback on single item checked changes.  
 ![Preview](https://github.com/Flithor/ReusableCodes/blob/e1f49e2bcf884e6d8487a24a368a9d44eaebcf08/assets/DataGridCheckAllColumn_Preview.gif)
 
