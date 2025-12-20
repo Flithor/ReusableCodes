@@ -1,24 +1,23 @@
+// ReSharper disable LocalizableElement
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Flithor_ReusableCodes
+namespace Flithor_ReuHBPEMProxysableCodes
 {
     /// <summary>
     /// Use TcpListener to wait Tcplink
     /// </summary>
-    class TcpLinker
+    public class TcpLinker
     {
         readonly TcpListener tcpListener;
-        CancellationTokenSource stopToken;
-        
+        CancellationTokenSource? stopToken;
+
         public bool IsRunning => stopToken != null;
-        
+
         public TcpLinker(int port)
         {
             tcpListener = new TcpListener(IPAddress.Loopback, port);
@@ -26,15 +25,16 @@ namespace Flithor_ReusableCodes
         /// <summary>
         /// Start listening
         /// </summary>
-        public async Task StartAsync(CancellationTokenSource tokenSource = null)
+        public async Task StartAsync(CancellationTokenSource? tokenSource = null)
         {
             if (stopToken != null) return;
-            stopToken = new CancellationTokenSource();
+            stopToken = tokenSource ?? new CancellationTokenSource();
             await TcpRequestMonitor(stopToken.Token);
         }
+
         public void Stop()
         {
-            stopToken.Cancel();
+            stopToken?.Cancel();
             tcpListener.Stop();
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace Flithor_ReusableCodes
                 stopToken = null;
             }
         }
-        
+
         /// <summary>
         /// Waiting for pended link
         /// </summary>
@@ -71,7 +71,7 @@ namespace Flithor_ReusableCodes
             while (!token.IsCancellationRequested)
             {
                 if (tcpListener.Pending()) return true;
-                await Task.Delay(25);
+                await Task.Delay(25, token);
             }
             return false;
         }
@@ -83,10 +83,10 @@ namespace Flithor_ReusableCodes
         /// <param name="token"></param>
         private async void TcpLinkMonitor(TcpClient tcpClient, CancellationToken token)
         {
-            var remote = tcpClient.Client.RemoteEndPoint.ToString();
             try
             {
                 const int bufferLength = 1024;
+                string remote = tcpClient.Client.RemoteEndPoint.ToString();
                 using (var tcpStream = tcpClient.GetStream())
                 {
                     Console.WriteLine($"Tcp link connected, remote is: {remote}");
@@ -107,7 +107,7 @@ namespace Flithor_ReusableCodes
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + $"\r\nDisconnected by exception, remote is:{remote}");
+                Console.WriteLine(ex.Message + $"\r\nDisconnected by exception, remote is:{tcpClient.Client.RemoteEndPoint}");
             }
         }
         /// <summary>
