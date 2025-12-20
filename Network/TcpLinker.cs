@@ -35,7 +35,7 @@ namespace Flithor_ReusableCodes
         public void Stop()
         {
             stopToken.Cancel();
-            tcpListeners.Stop();
+            tcpListener.Stop();
         }
         /// <summary>
         /// Waiting for Tcp link request
